@@ -1,0 +1,24 @@
+name: xiaoya-glue-src
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '5 * * * *'
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+        image: xiaoyaliu/glue:python
+
+    steps:
+      - name: Obtain Latest Git ONLY within container for checkout
+        run: apk add git --update-cache
+      - uses: actions/checkout@v4
+      - run: |
+          git config --global --add safe.directory /__w/xiaoya-glue-src/xiaoya-glue-src
+          find / -maxdepth 1 -type f -exec cp {} . \; 
+          ls -al
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
