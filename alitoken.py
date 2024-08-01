@@ -3,6 +3,20 @@
 import time
 import pyqrcode
 import requests
+import base64
+import json
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import unpad
+
+def decrypt_AES256_CBC_PKCS7(ciphertext, key, iv):
+    key = key[:32]
+    key = key.ljust(32, "\0")
+    decoded_ciphertext = base64.b64decode(ciphertext)
+    iv = bytes.fromhex(iv)
+    cipher = AES.new(key.encode('utf8'), AES.MODE_CBC, iv=iv)
+    decrypted_data = cipher.decrypt(decoded_ciphertext)
+    unpadded_data = unpad(decrypted_data, AES.block_size)
+    return unpadded_data.decode('utf8')
 
 if __name__ == '__main__':
     data = requests.post('http://api.extscreen.com/aliyundrive/qrcode', data={
@@ -27,15 +41,21 @@ if __name__ == '__main__':
             auth_code = status_data['authCode']
             break
     # 使用code换refresh_token
-    token_data = requests.post('http://api.extscreen.com/aliyundrive/token', data={
+    token = requests.post('http://api.extscreen.com/aliyundrive//v2/token', data={
         'code': auth_code,
-    }).json()['data']
-    refresh_token = token_data['refresh_token']
+    }).json()
+    token_data = token['data']
+    ciphertext = token_data['ciphertext']
+    iv = token_data['iv']
+    key = "^(i/x>>5(ebyhumz*i1wkpk^orIs^Na."
+    token_data = decrypt_AES256_CBC_PKCS7(ciphertext, key, iv)
+    parsed_json = json.loads(token_data)
+    refresh_token = parsed_json['refresh_token']
     file = open("/data/myopentoken.txt", "w")
     file.write(refresh_token)
     file.close()
     file = open("/data/open_tv_token_url.txt", "w")
-    file.write("https://alitv.sakurapy.de/token")
+    file.write("https://www.voicehub.top/api/v1/oauth/alipan/token")
     file.close()
 
 
