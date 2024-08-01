@@ -57,5 +57,5 @@ if __name__ == '__main__':
     file = open("/data/open_tv_token_url.txt", "w")
     file.write("https://www.voicehub.top/api/v1/oauth/alipan/token")
     file.close()
-
+    print("\n成功保存配置，请重启xiaoya后生效\n")
 
