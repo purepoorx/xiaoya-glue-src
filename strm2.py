@@ -19,16 +19,16 @@ def list_files(webdav_url1, username, password):
 	while q<5:
 		try:		   
 		   # 获取WebDAV服务器上的文件列表
-			print("获取", webdav_url1.replace(webdav_url,''))
+			print("获取", webdav_url1.replace(webdav_url,''), flush=True)
 			time.sleep(2)
 			files = client.list()
 		except:
 			q+=1
-			print('连接失败，2秒后重试...')
+			print('连接失败，2秒后重试...', flush=True)
 			time.sleep(2)
 		else:
 			if q>1:
-				print('重连成功...')
+				print('重连成功...', flush=True)
 			break
 
 	for file in files[1:]:
@@ -99,7 +99,7 @@ for b in wenjian_all:
 	strm_file = save_mulu + prefix.replace('%20'," ") + "." + 'strm'
 	if ext.upper() in ['MP4','MKV','FLV','AVI','TS','WMV','MOV','RM','RMVB','WEBM','WAV','MP3','FLAC','APE','WV','ALAC','M4A','AAC','WMA']:
 		if not os.path.exists(strm_file):
-			print('正在处理：'+b.replace(webdav_url,''))
+			print('正在处理：'+b.replace(webdav_url,''), flush=True)
 			try:
 				os.makedirs(os.path.dirname(strm_file),exist_ok=True)
 				with open(strm_file,"w",encoding='utf-8') as f:
@@ -111,9 +111,9 @@ for b in wenjian_all:
 					with open(strm_file.translate(translation_table),"w",encoding='utf-8') as f:
 						f.write(b.replace('/dav','/d').replace(" ","%20"))
 				except:
-					print(b.replace(webdav_url,'')+'处理失败，文件名包含特殊符号，建议重命名！')
+					print(b.replace(webdav_url,'')+'处理失败，文件名包含特殊符号，建议重命名！', flush=True)
 		else:
-			print('文件已存在：'+strm_file)	
+			print('文件已存在：'+strm_file, flush=True)	
 print('处理完毕, 检查处理结果....')
 def check_strm_files(directory):
     for root, dirs, files in os.walk(directory):
