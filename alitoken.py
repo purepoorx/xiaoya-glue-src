@@ -41,7 +41,7 @@ if __name__ == '__main__':
             auth_code = status_data['authCode']
             break
     # 使用code换refresh_token
-    token = requests.post('http://api.extscreen.com/aliyundrive//v2/token', data={
+    token = requests.post('http://api.extscreen.com/aliyundrive/v2/token', data={
         'code': auth_code,
     }).json()
     token_data = token['data']
@@ -55,7 +55,7 @@ if __name__ == '__main__':
     file.write(refresh_token)
     file.close()
     file = open("/data/open_tv_token_url.txt", "w")
-    file.write("https://www.voicehub.top/api/v1/oauth/alipan/token")
+    file.write("https://xiaoya.younv.at/oauth/alipan/token")
     file.close()
     print("\n成功保存配置，请重启xiaoya后生效\n")
 
