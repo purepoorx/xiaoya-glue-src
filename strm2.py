@@ -96,7 +96,11 @@ else:
 for b in wenjian_all:
 	prefix = ".".join(b.replace(webdav_url,'').split(".")[0:-1])
 	ext = b.replace(webdav_url,'').split(".")[-1]
-	strm_file = save_mulu + prefix.replace('%20'," ") + "." + 'strm'
+    strm_file_temp = save_mulu + prefix.replace('%20'," ")
+    if len(strm_file_temp) > 245:
+           strm_file = strm_file_temp[:245] + "_xxx" + "." + 'strm'
+    else:
+           strm_file = strm_file_temp + "." + 'strm'
 	if ext.upper() in ['MP4','MKV','FLV','AVI','TS','WMV','MOV','RM','RMVB','WEBM','WAV','MP3','FLAC','APE','WV','ALAC','M4A','AAC','WMA']:
 		if not os.path.exists(strm_file):
 			print('正在处理：'+b.replace(webdav_url,''), flush=True)
